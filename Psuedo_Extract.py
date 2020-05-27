@@ -1,14 +1,14 @@
-def zip(filename):
+def zip():
     zip_archive = zipfile.ZipFile(filename, 'r')
     zip_archive.extractall(path=os.path.join(os.getcwd()) + '/extracted_zip')
     """move the file back into the other directory"""
 
-def bzip(filename):
+def bzip():
     """unzip the file"""
     """move it bak the other original dir"""
 
 
-def gzip(filename):
+def gzip():
     """extract gzip"""
     """move it back to the original dir"""
 
@@ -17,22 +17,35 @@ def gzip(filename):
 import magic
 import zipfile
 import os
-def main(filename):
+
+def main():
+    global filename
+    """this is because the unzipping of files changes the name
+       so you need to be able to mutate it all around the project"""
+
+    filename = input('file name: ')
+    """lets the user input the filename"""
 
     Current_ENC = magic.from_file(filename)
-    while(Current_ENC != 'ASCII text'):
+
+    while Current_ENC != 'ASCII text':
+
         Current_ENC = magic.from_file(filename)
+
         if Current_ENC[0:4] == 'gzip':
-            gzip(filename)
-            """change the filename"""
+            gzip()
+
         elif Current_ENC == 'bzip':
-            bzip(filename)
-            """change the filename"""
+            bzip()
+
         elif Current_ENC[0:3] == 'zip':
-            zip(filename)
-            """change the filename"""
+            zip()
+
+    return 'success the file is in {}'.format(os.getcwd())
+
+
+
 
 if __name__ == '__main__':
-    main("""filename""")
+    main()
 
-    """create git tommorow"""
