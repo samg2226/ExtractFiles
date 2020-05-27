@@ -1,16 +1,18 @@
 def zip():
     zip_archive = zipfile.ZipFile(filename, 'r')
     zip_archive.extractall(path=os.path.join(os.getcwd()) + '/extracted_zip')
+
     """move the file back into the other directory"""
 
 def bzip():
-    """unzip the file"""
-    """move it bak the other original dir"""
-
+    """unzip the file
+       move it back to the right dir
+       change the filename"""
 
 def gzip():
-    """extract gzip"""
-    """move it back to the original dir"""
+    """unzip the file
+        move it back to the right dir
+        change the filename"""
 
 
 
