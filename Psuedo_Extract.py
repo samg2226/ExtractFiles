@@ -1,4 +1,6 @@
+
 def zip():
+    global filename
     zip_archive = zipfile.ZipFile(filename, 'r')
     zip_archive.extractall(path=os.path.join(os.getcwd()) + '/extracted_zip')
 
@@ -6,6 +8,7 @@ def zip():
     """move the file back into the other directory"""
 
 def bzip():
+    global filename
     """check for extracted_zip_2 later"""
 
     if 'extracted_zip' in os.listdir():
@@ -42,14 +45,11 @@ def bzip():
 
 """move it back to the right dir"""
 
-def gzip():
-    """have python check if there is a directory named extracted_zip and if there is then go
-       into that directory and then run the code below, MAYBE DO THIS TWICE BECAUSE THERE COULD BE
-       ZIP FILES IN THE EXTRACTED_ZIP DIRECTORY"""
+def gzip_func():
+    global filename
     if 'extracted_zip' in os.listdir():
         os.chdir('extracted_zip')
         line_list = []
-        import gzip
         f = gzip.open(filename, 'rb')
         for line in f.readlines():
             line = str(line)
@@ -63,8 +63,7 @@ def gzip():
         f.close()
     else:
         line_list = []
-        import gzip
-        f = gzip.open(filename, 'rb')
+        f = gzip.open(filename, 'r')
         for line in f.readlines():
             line = str(line)
             line = line.replace('b', '')
@@ -77,6 +76,7 @@ def gzip():
         f.close()
 
 def tar():
+    import tarfile
     global filename
     if 'extracted_zip' in os.listdir():
         os.chdir('extracted_zip')
@@ -95,7 +95,6 @@ def tar():
     else:
 
         org_list = os.listdir()
-        import tarfile
         tar = tarfile.open(filename)
         tar.extractall()
         tar.close()
@@ -115,7 +114,7 @@ import zipfile
 import os
 import bz2file
 import gzip
-import tarfile
+
 
 def main():
     global filename
@@ -132,7 +131,7 @@ def main():
         Current_ENC = magic.from_file(filename)
 
         if Current_ENC[0:4] == 'gzip':
-            gzip()
+            gzip_func()
 
         elif Current_ENC == 'bzip':
             bzip()
