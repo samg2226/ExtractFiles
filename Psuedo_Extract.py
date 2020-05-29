@@ -3,43 +3,27 @@ def zip():
     global filename
     zip_archive = zipfile.ZipFile(filename, 'r')
     zip_archive.extractall(path=os.path.join(os.getcwd()) + '/extracted_zip')
-
     """this creates another directory and puts the file in that directory"""
     """move the file back into the other directory"""
-
+    filename = filename[0:-4]
 def bzip():
     global filename
     """check for extracted_zip_2 later"""
 
-    if 'extracted_zip' in os.listdir():
-        os.chdir('extracted_zip')
-        line_list = []
-        file = bz2file.open(filename, 'r')
-        for line in file.readlines():
-            line = str(line)
-            line = line.replace('b', '')
-            line = line[1:-3]
-            line_list.append(line)
-        filename = filename[0:-4]
-        f = open(filename, 'w')
-        new_file = '\n'.join(line_list)
-        f.write(new_file)
-        f.close()
 
+    line_list = []
+    file = bz2file.open(filename, 'r')
+    for line in file.readlines():
+        line = str(line)
+        line = line.replace('b', '')
+        line = line[1:-3]
+        line_list.append(line)
+    filename = filename[0:-4]
+    f = open(filename, 'w')
+    new_file = '\n'.join(line_list)
+    f.write(new_file)
+    f.close()
 
-    else:
-        line_list = []
-        file = bz2file.open(filename, 'r')
-        for line in file.readlines():
-            line = str(line)
-            line = line.replace('b', '')
-            line = line[1:-3]
-            line_list.append(line)
-        filename = filename[0:-4]
-        f = open(filename, 'w')
-        new_file = '\n'.join(line_list)
-        f.write(new_file)
-        f.close()
 
 
 
@@ -47,63 +31,29 @@ def bzip():
 
 def gzip_func():
     global filename
-    if 'extracted_zip' in os.listdir():
-        os.chdir('extracted_zip')
-        line_list = []
-        f = gzip.open(filename, 'rb')
-        for line in f.readlines():
-            line = str(line)
-            line = line.replace('b', '')
-            line = line[1:-3]
-            line_list.append(line)
-        filename = filename[0:-3]
-        f = open(filename, 'w')
-        new_file = '\n'.join(line_list)
-        f.write(new_file)
-        f.close()
-    else:
-        line_list = []
-        f = gzip.open(filename, 'r')
-        for line in f.readlines():
-            line = str(line)
-            line = line.replace('b', '')
-            line = line[1:-3]
-            line_list.append(line)
-        filename = filename[0:-3]
-        f = open(filename, 'w')
-        new_file = '\n'.join(line_list)
-        f.write(new_file)
-        f.close()
+
+    with gzip.open(filename, 'rb') as infile:
+        with open(filename[0:-3], 'wb') as outfile:
+            for line in infile:
+                outfile.write(line)
+    outfile.close()
+    filename = filename[0:-3]
+
 
 def tar():
-    import tarfile
+
     global filename
-    if 'extracted_zip' in os.listdir():
-        os.chdir('extracted_zip')
-        org_list = os.listdir()
-        import tarfile
-        tar = tarfile.open(filename)
-        tar.extractall()
-        tar.close()
-        """then have the other files search if this exist"""
-        new_list = os.listdir()
 
-        for i in new_list:
-            if i not in org_list:
-                filename = i
+    org_list = os.listdir()
+    tar = tarfile.open(filename)
+    tar.extractall()
+    tar.close()
+    """then have the other files search if this exist"""
+    new_list = os.listdir()
 
-    else:
-
-        org_list = os.listdir()
-        tar = tarfile.open(filename)
-        tar.extractall()
-        tar.close()
-        """then have the other files search if this exist"""
-        new_list = os.listdir()
-
-        for i in new_list:
-            if i not in org_list:
-                filename = i
+    for i in new_list:
+        if i not in org_list:
+            filename = i
 
 
 
@@ -114,7 +64,7 @@ import zipfile
 import os
 import bz2file
 import gzip
-
+import tarfile
 
 def main():
     global filename
@@ -136,8 +86,9 @@ def main():
         elif Current_ENC == 'bzip':
             bzip()
 
-        elif Current_ENC[0:3] == 'zip':
+        elif Current_ENC[0:3] == 'Zip':
             zip()
+            os.chdir('extracted_zip')
 
         elif Current_ENC[0:9] == 'POSIX tar':
             tar()
