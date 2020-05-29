@@ -8,21 +8,12 @@ def zip():
     filename = filename[0:-4]
 def bzip():
     global filename
-    """check for extracted_zip_2 later"""
-
-
-    line_list = []
-    file = bz2file.open(filename, 'r')
-    for line in file.readlines():
-        line = str(line)
-        line = line.replace('b', '')
-        line = line[1:-3]
-        line_list.append(line)
+    with bz2file.open(filename, 'rb') as infile:
+        with open(filename[0:-4], 'wb') as outfile:
+            for line in infile.readlines():
+                outfile.write(line)
+    outfile.close()
     filename = filename[0:-4]
-    f = open(filename, 'w')
-    new_file = '\n'.join(line_list)
-    f.write(new_file)
-    f.close()
 
 
 
@@ -83,7 +74,7 @@ def main():
         if Current_ENC[0:4] == 'gzip':
             gzip_func()
 
-        elif Current_ENC == 'bzip':
+        elif Current_ENC[0:4] == 'bzip':
             bzip()
 
         elif Current_ENC[0:3] == 'Zip':
